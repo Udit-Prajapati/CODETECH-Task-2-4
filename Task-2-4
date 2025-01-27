@@ -1,0 +1,33 @@
+# 1. Backup Script
+-- Full Backup Script
+BACKUP DATABASE [YourDatabaseName]
+TO DISK = 'C:\Backup\YourDatabaseName_Full.bak'
+WITH FORMAT, 
+    MEDIANAME = 'SQLServerBackups', 
+    NAME = 'Full Backup of YourDatabaseName';
+GO
+
+
+
+
+
+# 2. Restore Script
+-- Restore Database Script
+USE master;
+GO
+
+-- Terminate any connections to the database
+ALTER DATABASE [YourDatabaseName] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
+
+-- Restore the database
+RESTORE DATABASE [YourDatabaseName]
+FROM DISK = 'C:\Backup\YourDatabaseName_Full.bak'
+WITH REPLACE, 
+    MOVE 'YourDatabaseName_Data' TO 'C:\Data\YourDatabaseName.mdf',
+    MOVE 'YourDatabaseName_Log' TO 'C:\Data\YourDatabaseName_Log.ldf';
+GO
+
+-- Set the database back to multi-user mode
+ALTER DATABASE [YourDatabaseName] SET MULTI_USER;
+GO
